@@ -51,8 +51,6 @@ AnnoCPAN, Annotated CPAN documentation http://annocpan.org/dist/Math::GSL
 
 CPAN Ratings http://cpanratings.perl.org/d/Math::GSL
 
-Search CPAN http://search.cpan.org/dist/Math::GSL
-
 
 # Copyright and Licence
 
