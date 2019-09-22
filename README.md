@@ -47,8 +47,6 @@ MetaCPAN: https://metacpan.org/release/Math-GSL
 
 Known bugs/issues: https://github.com/leto/math--gsl/issues/
 
-AnnoCPAN, Annotated CPAN documentation http://annocpan.org/dist/Math::GSL
-
 CPAN Ratings http://cpanratings.perl.org/d/Math::GSL
 
 
