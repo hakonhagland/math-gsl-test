@@ -1,0 +1,86 @@
+language: perl
+dist: trusty
+git:
+    depth: 5
+
+cache:
+  - ccache
+  - apt
+  - directories:
+    - /tmp/src
+    - /tmp/gsl-2.5
+    - /tmp/gsl-2.4
+    - /tmp/gsl-2.3
+    - /tmp/gsl-2.2.1
+    - /tmp/gsl-2.0
+    - /tmp/gsl-2.1
+    - /tmp/gsl-1.15
+    - /tmp/gsl-1.16
+    - /tmp/gsl-master
+
+before_cache:
+  - rm -f ${GSL_INST_DIR}/gsl-*/config.log ${GSL_INST_DIR}/gsl-*/libtool
+
+perl:
+    - "5.26"
+    - "5.24"
+    - "5.20-extras" # -Duseshrplib -Duseithreads
+    - "5.16"
+    - "5.10"
+    - "5.8"
+
+# GSL_CURRENT should always point to the version we build the CPAN dist with
+env:
+    global:
+        - CCACHE_CPP2=1
+        - CC="ccache clang"
+        - GSL_CURRENT=2.5
+        - GSL_INST_DIR=/tmp
+        - GSL_SRC_DIR=/tmp/src
+        - DIST_DIR=/tmp
+    matrix:
+        - GSL=2.5
+        - GSL=2.4
+        - GSL=2.3
+        - GSL=2.2.1
+        - GSL=2.1
+        - GSL=2.0
+        - GSL=1.16
+        - GSL=1.15
+        - GSL=master
+
+addons:
+  apt:
+    packages:
+      # - libgsl0-dev # this is 1.16 on trusty
+      - gdb
+      - ccache
+      - swig2.0
+      - texinfo
+
+before_install: ./_travis/before_install.sh
+
+# Add verbosity for debugging
+install:
+    - PKG_CONFIG_PATH=${GSL_INST_DIR}/gsl-$GSL/lib/pkgconfig PATH=${GSL_INST_DIR}/gsl-${GSL_CURRENT}/bin:$PATH cpanm --installdeps --notest --verbose .
+    - cpanm --verbose --notest --skip-satisfied App::ReportPrereqs
+
+before_script:
+    - ulimit -c unlimited -S       # enable core dumps
+
+script:
+    - export LD_LIBRARY_PATH=${GSL_INST_DIR}/gsl-$GSL/lib
+    - export PATH=${GSL_INST_DIR}/gsl-$GSL/bin:$PATH
+    - cd /tmp
+    - tar zxpf ${DIST_DIR}/Math-GSL*
+    - cd Math-GSL*
+    - perl Build.PL
+    - mymeta-cpanfile > cpanfile
+    - report-prereqs --with-develop
+    - ./Build
+    - ./Build test
+
+# NOTE: this only finds the first corefile generated
+after_failure:
+    - COREFILE=$(find . -maxdepth 1 -name "core*" | head -n 1) # find core file
+    - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" `which perl` -ex "thread apply all bt" -ex "info registers" -ex "info float" -ex "set pagination 0" -batch; fi
