@@ -3,11 +3,11 @@
 
 set -u
 
-${GSL_INST_DIR:?environment variable not specified}
-${GSL_SRC_DIR:?environment variable not specified}
-${GSL:?environment variable not specified}
-${GSL_CURRENT:?environment variable not specified}
-${GSL_MIRROR:=http://mirrors.kernel.org/gnu/gsl}
+: ${GSL_INST_DIR:?environment variable not specified}
+: ${GSL_SRC_DIR:?environment variable not specified}
+: ${GSL:?environment variable not specified}
+: ${GSL_CURRENT:?environment variable not specified}
+: ${GSL_MIRROR:=http://mirrors.kernel.org/gnu/gsl}
 
 echo "current dir: $PWD"
 banner () {
