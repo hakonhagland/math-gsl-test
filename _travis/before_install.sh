@@ -209,15 +209,7 @@ if [ -n "$TRAVIS_BUILD_DIR" ] ; then
 	PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
 	perl Build.PL && ./Build installdeps --cpan_client cpanm
         echo $PWD
-        mkdir -p xs
+        #mkdir -p xs
         ./Build
-        ls 
-        ls lib
-        ls lib/Math
-        ls lib/Math/GSL
-        ls Math-GSL-0.40
-        ./Build dist # create a CPAN dist with latest supported GSL release
-	cp Math-GSL*.tar.gz $DIST_DIR
-	ls -la ${DIST_DIR}/Math-GSL*.tar.gz # now we have a CPAN dist to test on each version of GSL
     )
 fi
