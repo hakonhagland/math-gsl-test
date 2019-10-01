@@ -208,6 +208,6 @@ if [ -n "$TRAVIS_BUILD_DIR" ] ; then
 	perl Build.PL && ./Build installdeps --cpan_client cpanm
         echo $PWD
         #mkdir -p xs
-        ./Build
+        #./Build
     )
 fi
