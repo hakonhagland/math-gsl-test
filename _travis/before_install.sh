@@ -32,18 +32,6 @@ get_gsl () (
     fi
 )
 
-list_cache () {
-
-    banner
-
-    echo "Source directory: $GSL_SRC_DIR"
-    ls -al $GSL_SRC_DIR
-
-    
-    echo "Installation directory: $GSL_INST_DIR"
-    find $GSL_INST_DIR -name gsl-config
-}
-
 
 get_gsl_version () (
 
@@ -51,53 +39,28 @@ get_gsl_version () (
 
     banner
 
-    if [ ! -e $GSL_INST_DIR/gsl-$1/bin/gsl-config ]; then
+    echo "Retrieving GSL $1"
+    wget -q $GSL_MIRROR/gsl-$1.tar.gz \
+         --retry-connrefused \
+         --timeout=900 
 
-        echo "GSL $1 has not been built and installed"
-
-        # only download if necessary
-        if [ ! -e "gsl-$1.tar.gz" ]; then
-            echo "Retrieving GSL $1"
-            wget -q $GSL_MIRROR/gsl-$1.tar.gz \
-                 --retry-connrefused \
-                 --timeout=900 \
-                || die "Error retrieving GSL $1"
-        fi
-
-        rm -rf gsl-$1 || die "Error removing existing build"
-
-        echo
-        echo "Extracting..."
-        tar zxpf gsl-$1.tar.gz \
-            || die "Error extracting"
-
-        cd gsl-$1
-
-        echo
-        echo "Configuring..."
-        ./configure --prefix $GSL_INST_DIR/gsl-$1 \
-                    || die "Error Configuing"
-
-        echo
-        echo "Building..."
-        if ! make -j2 >& make.log ; then
-            cat make.log
-            die "Error Building"
-        fi
-
-        echo
-        echo "Installing..."
-        if ! make -j2 install >& install.log ; then
-            cat install.log
-            die "Error Installing"
-        fi
-
-        rm -rf gsl-$1 || die "Error removing existing build"
-
-    else
-        echo "GSL $1 already installed"
+    if [[ -d gsl-$1 ]] ; then
+        rm -rf gsl-$1
     fi
-
+    echo
+    echo "Extracting..."
+    tar zxpf gsl-$1.tar.gz
+    cd gsl-$1
+    echo
+    echo "Configuring..."
+    ./configure --prefix $GSL_INST_DIR/gsl-$1 
+    echo
+    echo "Building..."
+    make -j2 
+    echo
+    echo "Installing..."
+    make -j2 install
+    rm -rf gsl-$1
     banner
 )
 
@@ -181,8 +144,6 @@ get_gsl_master () (
 
 mkdir -p $GSL_SRC_DIR
 mkdir -p $GSL_INST_DIR
-
-list_cache
 
 echo "Testing agains GSL $GSL; Building with GSL $GSL_CURRENT"
 echo
