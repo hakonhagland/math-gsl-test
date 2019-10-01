@@ -187,8 +187,6 @@ list_cache
 echo "Testing agains GSL $GSL; Building with GSL $GSL_CURRENT"
 echo
 
-set -e
-
 get_gsl $GSL
 if [ $GSL != $GSL_CURRENT ] ; then
     get_gsl $GSL_CURRENT
