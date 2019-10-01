@@ -3,41 +3,31 @@
 
 set -u
 
-: ${GSL_INST_DIR:?environment variable not specified}
-: ${GSL_SRC_DIR:?environment variable not specified}
-: ${GSL:?environment variable not specified}
-: ${GSL_CURRENT:?environment variable not specified}
-: ${GSL_MIRROR:=http://mirrors.kernel.org/gnu/gsl}
+${GSL_INST_DIR:?environment variable not specified}
+${GSL_SRC_DIR:?environment variable not specified}
+${GSL:?environment variable not specified}
+${GSL_CURRENT:?environment variable not specified}
+${GSL_MIRROR:=http://mirrors.kernel.org/gnu/gsl}
 
+echo "current dir: $PWD"
 banner () {
 
-    echo
-    echo "==================================================="
+   echo
+   echo "==================================================="
 
-}
+
 
 die () {
 
-    echo >&2 $@
-    banner 
-    exit 1
-}
-
-get_gsl () (
-
-    if [ "$1" = master ] ; then
-        get_gsl_master
-    else
-        get_gsl_version $1
-    fi
-)
+   echo >&2 $@
+   banner 
+   exit 1
 
 
-get_gsl_version () (
+get_gsl_version() {
+   cd $GSL_SRC_DIR
 
-    cd $GSL_SRC_DIR
-
-    banner
+   banner
 
     echo "Retrieving GSL $1"
     wget -q $GSL_MIRROR/gsl-$1.tar.gz \
@@ -56,91 +46,14 @@ get_gsl_version () (
     ./configure --prefix $GSL_INST_DIR/gsl-$1 
     echo
     echo "Building..."
-    make -j2 
+    make -j2 >& make.log
     echo
     echo "Installing..."
-    make -j2 install
+    make -j2 install >& install.log
     rm -rf gsl-$1
     banner
-)
+}
 
-get_gsl_master () (
-
-    banner
-
-    cd $GSL_SRC_DIR
-
-    if [ -d gsl-master -a ! -d gsl-master/.git ] ; then
-
-        echo
-        echo "Removing existing but incomplete gsl-master directory"
-        rm -rf gsl-master || die "Error removing gsl-master"
-    fi
-
-
-    if [ ! -d "gsl-master" ]; then
-
-        echo
-        echo "Cloning master from repo"
-        git clone git://git.savannah.gnu.org/gsl.git gsl-master \
-            || die "Error cloning GSL master"
-
-    else
-
-        echo
-        echo "Updating from repo"
-        git \
-            --git-dir=gsl-master/.git \
-            --work-tree=gsl-master \
-            pull origin master \
-          || die "Error updating working dir"
-
-    fi
-
-
-    GSL_COMMIT=$(git --git-dir=gsl-master/.git rev-parse master)
-
-    if [ ! -e $GSL_INST_DIR/gsl-master/$GSL_COMMIT ]; then
-
-        echo
-        echo "GSL master $GSL_COMMIT has not been built and installed"
-
-        cd gsl-master || die "Where's $GSL_SRC_DIR/gsl-master"
-
-        echo
-        echo "Bootstrapping..."
-        ./autogen.sh || die "error bootstrapping"
-
-        echo
-        echo "Configuring..."
-        ./configure --enable-maintainer-mode --enable-silent-rules --prefix $GSL_INST_DIR/gsl-master \
-            || die "error configuring"
-
-        echo
-        echo "Building..."
-        if ! make -j2 >& make.log ; then
-            cat make.log
-            die "Error Building"
-        fi
-
-        echo
-        echo "Installing..."
-        if ! make -j2 install >& install.log ; then
-            cat install.log
-            die "Error Installing"
-        fi
-
-        touch $GSL_INST_DIR/gsl-master/$GSL_COMMIT
-
-    else
-
-        echo
-        echo "GSL master $GSL_COMMIT already installed"
-
-    fi
-    banner
-
-)
 
 mkdir -p $GSL_SRC_DIR
 mkdir -p $GSL_INST_DIR
@@ -148,27 +61,15 @@ mkdir -p $GSL_INST_DIR
 echo "Testing agains GSL $GSL; Building with GSL $GSL_CURRENT"
 echo
 
-get_gsl $GSL
+get_gsl_version $GSL
 if [ $GSL != $GSL_CURRENT ] ; then
     get_gsl $GSL_CURRENT
 fi
 
+cpanm -n PkgConfig
+cd $TRAVIS_BUILD_DIR
 
-if [ -n "$TRAVIS_BUILD_DIR" ] ; then
-
-    : ${DIST_DIR:?environment variable not specified}
-
-    # perform in subshell to avoid polluting this shell
-    (
-        set -v
-	cpanm -n PkgConfig
-	cd $TRAVIS_BUILD_DIR
-
-	export LD_LIBRARY_PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-	PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
-	perl Build.PL && ./Build installdeps --cpan_client cpanm
-        echo $PWD
-        #mkdir -p xs
-        #./Build
-    )
-fi
+export LD_LIBRARY_PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
+perl Build.PL && ./Build installdeps --cpan_client cpanm
+echo $PWD
