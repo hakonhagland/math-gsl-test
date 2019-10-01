@@ -51,13 +51,7 @@ script:
     - export LD_LIBRARY_PATH=${GSL_INST_DIR}/gsl-$GSL/lib
     - export PATH=${GSL_INST_DIR}/gsl-$GSL/bin:$PATH
     - cd /tmp
-    - tar zxpf ${DIST_DIR}/Math-GSL*
-    - cd Math-GSL*
-    - perl Build.PL
-    - mymeta-cpanfile > cpanfile
-    - report-prereqs --with-develop
-    - ./Build
-    - ./Build test
+    - echo "Done!"
 
 # NOTE: this only finds the first corefile generated
 after_failure:
