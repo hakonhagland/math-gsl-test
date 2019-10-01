@@ -11,18 +11,16 @@ set -u
 
 echo "current dir: $PWD"
 banner () {
-
    echo
    echo "==================================================="
-
+}
 
 
 die () {
-
    echo >&2 $@
    banner 
    exit 1
-
+}
 
 get_gsl_version() {
    cd $GSL_SRC_DIR
@@ -68,8 +66,8 @@ fi
 
 cpanm -n PkgConfig
 cd $TRAVIS_BUILD_DIR
+echo "TRAVIS_BUILD_DIR=$PWD"
 
 export LD_LIBRARY_PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
 perl Build.PL && ./Build installdeps --cpan_client cpanm
-echo $PWD
