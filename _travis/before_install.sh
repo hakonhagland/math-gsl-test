@@ -72,4 +72,5 @@ export LD_LIBRARY_PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/lib${LD_LIBRARY_PATH:+:$
 PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
 perl Build.PL && ./Build installdeps --cpan_client cpanm
 ls -l
-#./Build dist # create a CPAN dist with latest supported GSL release
+echo "PWD=$PWD"
+./Build dist # create a CPAN dist with latest supported GSL release
