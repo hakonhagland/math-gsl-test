@@ -71,6 +71,8 @@ echo "TRAVIS_BUILD_DIR=$PWD"
 export LD_LIBRARY_PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
 perl Build.PL && ./Build installdeps --cpan_client cpanm
+mkdir -p xs
+./Build
 ls -l
 echo "PWD=$PWD"
-./Build dist # create a CPAN dist with latest supported GSL release
+#./Build dist # create a CPAN dist with latest supported GSL release
