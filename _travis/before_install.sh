@@ -72,6 +72,7 @@ export LD_LIBRARY_PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/lib${LD_LIBRARY_PATH:+:$
 PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
 perl Build.PL && ./Build installdeps --cpan_client cpanm
 mkdir -p xs
+mkdir -p lib/Math/GSL
 ./Build
 ls -l
 echo "PWD=$PWD"
