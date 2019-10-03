@@ -81,4 +81,4 @@ ls -ld Math-GSL-0.40
 #echo "PWD=$PWD"
 #ls -l lib/Math/GSL
 mkdir -p Math-GSL-0.40/lib/Math/GSL
-./Build dist # create a CPAN dist with latest supported GSL release
+#./Build dist # create a CPAN dist with latest supported GSL release
