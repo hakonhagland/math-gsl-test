@@ -73,8 +73,11 @@ PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
 perl Build.PL && ./Build installdeps --cpan_client cpanm
 mkdir -p xs
 mkdir -p lib/Math/GSL
-./Build
-ls -l
-echo "PWD=$PWD"
-ls -l lib/Math/GSL
+perl --version
+perl -MFile::Path=mkpath -e'mkpath("Math-GSL-0.40", 0, oct(777))'
+ls -ld Math-GSL-0.40
+#./Build
+#ls -l
+#echo "PWD=$PWD"
+#ls -l lib/Math/GSL
 #./Build dist # create a CPAN dist with latest supported GSL release
