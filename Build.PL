@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Config;
 use Data::Dumper;
-use Module::Build;
+use MyModule::Build;
 use lib 'inc';
 use GSLBuilder;
 use Ver2Func;
@@ -134,7 +134,7 @@ my $builder = GSLBuilder->new(
     sign                  => 0,
     configure_requires => {
         'PkgConfig'       => '0.07720',
-        'Module::Build'   => '0.38',
+        'MyModule::Build'   => '0.38',
         'Alien::GSL'      => '1.01',
     },
     swig_version          => $swig_version,

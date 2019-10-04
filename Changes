@@ -113,7 +113,7 @@
     - Fix '-bundle not allowed with -dynamiclib' build error on Mac OS X - Yury Zavarin
     - Build swig wrappers for different versions of GSL (1.11 - 1.15) - Yury Zavarin
     - Minimum SWIG version is now 2.x (only required for developers using the git repo)
-    - Removed deprecated stuff from Build.PL and added Module::Build to configure_requires
+    - Removed deprecated stuff from Build.PL and added MyModule::Build to configure_requires
     - Many small documentation improvements
     - Fix build on Windows - Sisyphus
 

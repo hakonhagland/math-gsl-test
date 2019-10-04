@@ -6,7 +6,7 @@ use Config;
 use File::Copy;
 use File::Path qw/mkpath/;
 use File::Spec::Functions qw/:ALL/;
-use base 'Module::Build';
+use base 'MyModule::Build';
 
 use Ver2Func;
 
