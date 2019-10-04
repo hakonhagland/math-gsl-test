@@ -97,7 +97,6 @@ mkdir -p lib/Math/GSL
 #perl -MFile::Path=mkpath -e'mkpath("Math-GSL-0.40", 0, oct(777))'
 #ls -ld Math-GSL-0.40
 ./Build
-#patch_module_build
 #ls -l
 #echo "PWD=$PWD"
 #mkdir -p Math-GSL-0.40/lib/Math/GSL
