@@ -2,7 +2,7 @@ package GSLBuilder;
 
 use strict;
 use warnings;
-
+use lib 'debug';
 use Config;
 use File::Copy;
 use File::Path qw/mkpath/;
