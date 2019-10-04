@@ -78,7 +78,12 @@ echo "TRAVIS_BUILD_DIR=$PWD"
 
 export LD_LIBRARY_PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
-perl -Idebug Build.PL && ./Build installdeps --cpan_client cpanm
+perl Build.PL
+echo ----------------------------
+head -50 Build
+echo ----------------------------
+
+./Build installdeps --cpan_client cpanm
 mkdir -p xs
 mkdir -p lib/Math/GSL
 #perl --version
