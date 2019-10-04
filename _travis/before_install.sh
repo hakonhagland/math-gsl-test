@@ -100,7 +100,6 @@ mkdir -p lib/Math/GSL
 #patch_module_build
 #ls -l
 #echo "PWD=$PWD"
-#ls -l lib/Math/GSL
 #mkdir -p Math-GSL-0.40/lib/Math/GSL
 ./Build dist # create a CPAN dist with latest supported GSL release
 # perl -d ./Build dist
