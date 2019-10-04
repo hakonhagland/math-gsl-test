@@ -52,7 +52,15 @@ get_gsl_version() {
     banner
 }
 
+patch_module_build() {
+    cd debug
+    destdir=/home/travis/perl5/perlbrew/perls/5.26.3/lib/site_perl/5.26.3/Module/Build
+    cp Base.pm $destdir
+    cd ..
+}
 
+#/home/travis/perl5/perlbrew/perls/5.26.3/lib/site_perl/5.26.3/Module/Build/Base.pm
+#/home/travis/build/hakonhagland/math-gsl-test
 mkdir -p $GSL_SRC_DIR
 mkdir -p $GSL_INST_DIR
 
@@ -77,8 +85,11 @@ mkdir -p lib/Math/GSL
 #perl -MFile::Path=mkpath -e'mkpath("Math-GSL-0.40", 0, oct(777))'
 ls -ld Math-GSL-0.40
 ./Build
+patch_module_build
 #ls -l
 #echo "PWD=$PWD"
 #ls -l lib/Math/GSL
-mkdir -p Math-GSL-0.40/lib/Math/GSL
-#./Build dist # create a CPAN dist with latest supported GSL release
+#mkdir -p Math-GSL-0.40/lib/Math/GSL
+./Build dist # create a CPAN dist with latest supported GSL release
+# perl -d ./Build dist
+#which perl
