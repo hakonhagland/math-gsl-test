@@ -21,7 +21,6 @@ use strict;
 use warnings;
 use Config;
 use Data::Dumper;
-use lib 'debug';
 use Module::Build;
 use lib 'inc';
 use GSLBuilder;

@@ -59,6 +59,15 @@ patch_module_build() {
     cd ..
 }
 
+install_my_module_build() {
+    git clone https://github.com/hakonhagland/my-module-build.git
+    cd my-module-build
+    cpanm -n .
+}
+
+cd $TRAVIS_BUILD_DIR
+install_my_module_build
+
 #/home/travis/perl5/perlbrew/perls/5.26.3/lib/site_perl/5.26.3/Module/Build/Base.pm
 #/home/travis/build/hakonhagland/math-gsl-test
 mkdir -p $GSL_SRC_DIR
@@ -73,15 +82,11 @@ if [ $GSL != $GSL_CURRENT ] ; then
 fi
 
 cpanm -n PkgConfig
-cd $TRAVIS_BUILD_DIR
 echo "TRAVIS_BUILD_DIR=$PWD"
 
 export LD_LIBRARY_PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
 perl Build.PL
-echo ----------------------------
-head -50 Build
-echo ----------------------------
 
 ./Build installdeps --cpan_client cpanm
 mkdir -p xs
