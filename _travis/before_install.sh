@@ -83,6 +83,7 @@ if [ $GSL != $GSL_CURRENT ] ; then
 fi
 
 cpanm -n PkgConfig
+cd $TRAVIS_BUILD_DIR
 echo "TRAVIS_BUILD_DIR=$PWD"
 
 export LD_LIBRARY_PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
