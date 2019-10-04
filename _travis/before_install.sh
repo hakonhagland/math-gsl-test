@@ -55,7 +55,7 @@ get_gsl_version() {
 patch_module_build() {
     cd debug
     destdir=/home/travis/perl5/perlbrew/perls/5.26.3/lib/site_perl/5.26.3/Module/Build
-    cp Base.pm $destdir
+    sudo cp Base.pm $destdir
     cd ..
 }
 
@@ -78,14 +78,14 @@ echo "TRAVIS_BUILD_DIR=$PWD"
 
 export LD_LIBRARY_PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
-perl Build.PL && ./Build installdeps --cpan_client cpanm
-mkdir -p xs
-mkdir -p lib/Math/GSL
+perl -Idebug Build.PL && ./Build installdeps --cpan_client cpanm
+#mkdir -p xs
+#mkdir -p lib/Math/GSL
 #perl --version
 #perl -MFile::Path=mkpath -e'mkpath("Math-GSL-0.40", 0, oct(777))'
-ls -ld Math-GSL-0.40
+#ls -ld Math-GSL-0.40
 ./Build
-patch_module_build
+#patch_module_build
 #ls -l
 #echo "PWD=$PWD"
 #ls -l lib/Math/GSL
