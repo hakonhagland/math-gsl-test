@@ -63,6 +63,7 @@ install_my_module_build() {
     git clone https://github.com/hakonhagland/my-module-build.git
     cd my-module-build
     cpanm -n .
+    cd ..
 }
 
 cd $TRAVIS_BUILD_DIR
