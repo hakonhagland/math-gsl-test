@@ -88,17 +88,21 @@ echo "TRAVIS_BUILD_DIR=$PWD"
 
 export LD_LIBRARY_PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 PATH=$GSL_INST_DIR/gsl-${GSL_CURRENT}/bin:$PATH
+ls -R lib
+
 perl Build.PL
 
-./Build installdeps --cpan_client cpanm
-mkdir -p xs
-mkdir -p lib/Math/GSL
+ls -R lib
+
+#./Build installdeps --cpan_client cpanm
+#mkdir -p xs
+#mkdir -p lib/Math/GSL
 #perl --version
 #perl -MFile::Path=mkpath -e'mkpath("Math-GSL-0.40", 0, oct(777))'
 #ls -ld Math-GSL-0.40
-./Build
+#./Build
 #echo "PWD=$PWD"
 #mkdir -p Math-GSL-0.40/lib/Math/GSL
-./Build dist # create a CPAN dist with latest supported GSL release
+#./Build dist # create a CPAN dist with latest supported GSL release
 # perl -d ./Build dist
 #which perl
